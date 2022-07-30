@@ -6,9 +6,11 @@ const createItem = ({ preview, original, description }) => {
 <div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="large-image.jpg"
+      loading="lazy"
+      ${"loading" in HTMLImageElement.prototype ? `src = ${preview}` : ""}
+      class="gallery__image lazyload"
+      data-src="${preview}"
+      data-source="${original}"
       alt="${description}"
     />
   </a>
@@ -47,11 +49,9 @@ const onContainerClick = (event) => {
   if (!target.classList.contains("gallery__image")) {
     return;
   }
-  const linkRef = target.closest(".gallery__link");
-  const originalImage = linkRef.href;
 
   instance = basicLightbox.create(
-    `<img src="${originalImage}" width="1280" />`
+    `<img src="${target.dataset.source}" width="1280" />`
   );
   instance.show();
   document.addEventListener("keydown", onKeyPressed);

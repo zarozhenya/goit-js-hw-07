@@ -4,7 +4,9 @@ import { galleryItems } from "./gallery-items.js";
 const createItem = ({ preview, original, description }) => {
   return `
 <a class="gallery__item" href="${original}">
-  <img class="gallery__image" src="${preview}" alt="${description}" />
+  <img class="gallery__image lazyload" loading="lazy" ${
+    "loading" in HTMLImageElement.prototype ? `src="${preview}"` : ""
+  } data-src="${preview}" alt="${description}" />
 </a>`;
 };
 
