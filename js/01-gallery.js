@@ -29,8 +29,17 @@ const markup = createMarkup(galleryItems);
 containerRef.insertAdjacentHTML("beforeend", markup);
 
 /*
-    Adding event listener to container
+    Making logic
 */
+
+let instance;
+const onKeyPressed = (event) => {
+  if (event.code !== "Escape") {
+    return;
+  }
+  instance?.close();
+  document.removeEventListener("keydown", onKeyPressed);
+};
 
 const onContainerClick = (event) => {
   event.preventDefault();
@@ -41,10 +50,14 @@ const onContainerClick = (event) => {
   const linkRef = target.closest(".gallery__link");
   const originalImage = linkRef.href;
 
-  const instance = basicLightbox.create(
+  instance = basicLightbox.create(
     `<img src="${originalImage}" width="1280" />`
   );
   instance.show();
+  document.addEventListener("keydown", onKeyPressed);
+  instance.element().addEventListener("click", () => {
+    document.removeEventListener("keydown", onKeyPressed);
+  });
 };
 
 containerRef.addEventListener("click", onContainerClick);
